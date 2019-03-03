@@ -1,0 +1,283 @@
+
+package s;
+import java.util.*;
+public class SubStringEx {
+
+	
+	public static void linSearch() {
+		
+		String str = "GEEKSFORGEEKS";
+		int n = str.length();
+		int currentLength = 1;
+		int prev = 0;
+		int maxLength = 1;
+		//int lastIndex = 0;
+		final int number_of_chars = 256;
+		int[] visited = new int[number_of_chars];
+
+		for(int k =0; k<number_of_chars; k++ ){
+			visited[k] = -1;
+		}
+		
+		visited[str.charAt(0)] =  0;
+		
+		for(int i = 1; i < n; i++){
+			
+			prev = visited[str.charAt(i)];
+			
+			if((prev == -1) || i- currentLength > prev){
+				currentLength++;
+			}
+			else{
+				if(currentLength > maxLength){
+					maxLength = currentLength;
+					currentLength = i- prev;
+				}
+			}
+			visited[str.charAt(i)] = i;
+		//	lastIndex = i;
+		}
+		
+		if(currentLength > maxLength){
+			maxLength = currentLength;
+			
+		}
+		
+		System.out.println(str.substring(prev-1 , currentLength+1));
+	}
+	
+	
+	public static void mapApproach(String str){
+		
+		char[] ch = str.toCharArray();
+		String longestSubString = null;
+		int maxLength = 0;
+		
+		Map<Character,Integer> map = new LinkedHashMap<>();
+		
+		for(int i = 0; i < ch.length; i++){
+		
+			char c = ch[i];
+			if(!map.containsKey(c)){
+				map.put(c, i);
+			}
+			else{
+				i = map.get(c);
+				map.clear();
+			}
+			
+			if(map.size() > maxLength){
+				longestSubString = map.keySet().toString();
+				maxLength = map.size();
+			}	
+		}
+		
+		System.out.println("input"+ str);
+		System.out.println("max len:"+ maxLength);
+		System.out.println("max string:"+ longestSubString);
+	}
+	
+	public static void main(String[] args) {
+		
+		//abcabcbb  GEEKSFORGEEKS  pwwkew
+		mapApproach("pwwkew");
+	}
+
+}
+
+*******************
+package s;
+
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+
+public class Substring {
+
+	static int isSubstring(String s1, String s2) 
+    { 
+        int M = s1.length(); 
+        int N = s2.length(); 
+      
+        /* A loop to slide pat[] one by one */
+        for (int i = 0; i <= N-M; i++) { 
+            int j; 
+      
+            /* For current index i, check for 
+            pattern match */
+            for (j = 0; j < M; j++) 
+                if (s2.charAt(i + j) != s1.charAt(j)) 
+                    break; 
+      
+            if (j == M) 
+                return i; 
+        } 
+      
+        return -1; 
+    } 
+      
+	
+	public static void main(String[] args){
+		String s1 = "lo"; 
+        String s2 = "Hello"; 
+          
+        int res = isSubstring(s1, s2); 
+          
+        if (res == -1) 
+            System.out.println("Not present"); 
+        else
+            System.out.println("Present at index "  
+                                           + res); 
+	}
+}
+**************
+
+package s;
+
+class QuickSort{
+
+
+	public static void quickSort(int[] array){
+	
+		quickSort(array,0,array.length-1);
+	
+	}
+	
+	public static void quickSort(int[] array, int left, int right){
+	
+		if(left >= right) {
+			return;
+		}
+	
+		int pivot = array[(left + right)/2];
+		int index = partition(array,left,right,pivot);
+		quickSort(array,left,index-1);
+		quickSort(array,index,right);
+	
+	}
+	
+	public static int partition(int[] array, int left, int right, int pivot ){
+	
+		while(left <= right){
+		
+			while(array[left] < pivot){
+			{
+				left++;
+			}
+			while(array[right] > pivot){
+				right--;
+			}
+			
+			if(left <= right){
+				swap(array,left,right);
+				left++;
+				right--;
+			}
+			
+		}
+			
+	}
+	return left;
+
+	}
+	
+	public static void swap(int[] arr, int left, int right){
+	
+		int temp = arr[left];
+		arr[left] = arr[right];
+		arr[right] = temp;
+	}
+
+	public static void main(String[] args){
+	
+	 int x[] = {3,1,112,43,222,22};
+	 QuickSort.quickSort(x);
+	 System.out.println("Sorted array are:");
+	 for(int p: x){
+		System.out.println(p);
+	 }
+	}
+
+
+}
+
+****************
+
+merge
+
+package s;
+
+
+
+public class Solution {
+
+	
+	public static void mergeSort(int[] a, int n) {
+	   
+		if (n < 2) {
+	        return;
+	    }
+		
+	    int mid = n / 2;
+	    
+	    int[] l = new int[mid];
+	    
+	    int[] r = new int[n - mid];
+	 
+	    for (int i = 0; i < mid; i++) {
+	    	
+	        l[i] = a[i];
+	    }
+	    
+	    for (int i = mid; i < n; i++) {
+	    	
+	        r[i - mid] = a[i];
+	    }
+	    
+	    mergeSort(l, mid);
+	    
+	    mergeSort(r, n - mid);
+	 
+	    merge(a, l, r, mid, n - mid);
+	    
+	    
+	}
+	
+	
+		
+	public static void merge(int[] a, int[] l, int[] r, int left, int right) 
+	{
+			  
+			    int i = 0, j = 0, k = 0;
+			    while (i < left && j < right) 
+			    {
+			    	
+			        if (l[i] <= r[j]) {
+			            a[k++] = l[i++];
+			        }
+			        else {
+			            a[k++] = r[j++];
+			        }
+			    }
+			    
+			    while (i < left) 
+			    {
+			        a[k++] = l[i++];
+			    }
+			    
+			    while (j < right) 
+			    {
+			        a[k++] = r[j++];
+			    }
+	}
+
+    public static void main(String[] args) {
+    	   
+    		int[] actual = { 5, 1, 6, 2, 3, 4 };
+    	    Solution.mergeSort(actual, actual.length);
+    	    for(int x: actual){
+    	    	System.out.println(x);
+    	    }
+    }
+}
+
+*****************
